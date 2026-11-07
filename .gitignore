@@ -40,3 +40,4 @@ Thumbs.db
 # Gradio temporary files
 .gradio/
 assets/demo_samples/
+.gradio/
