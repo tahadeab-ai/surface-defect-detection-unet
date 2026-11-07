@@ -36,3 +36,7 @@ Thumbs.db
 # Explicitly track benchmark assets and demonstration figures
 !assets/*.png
 !assets/**/*.png
+
+# Gradio temporary files
+.gradio/
+assets/demo_samples/
