@@ -16,9 +16,7 @@
 
 The interactive Gradio defect inspection application allows real-time inference on uploaded industrial surface images with adjustable confidence thresholds and noise filtering contours:
 
-<p align="center">
-  <img src="assets/gradio_demo.png" width="95%" alt="Gradio Live Inspection Demo" />
-</p>
+![Gradio Live Inspection Demo](assets/gradio_demo.png)
 
 *Real-time surface QA inspection dashboard with PASS/FAIL grading, defect blob count, and surface area coverage percentage.*
 
@@ -109,10 +107,9 @@ Real progression of Combo Loss (BCE + Dice), Foreground Mean IoU, and Defect Dic
 ### 3. Pixel-Level Confusion Matrix & Precision-Recall Curve
 Empirical pixel classification distribution and Precision-Recall curve on the test partition.
 
-<p align="center">
-  <img src="assets/pixel_confusion_matrix.png" width="48%" alt="Pixel Confusion Matrix" />
-  <img src="assets/pr_curve.png" width="48%" alt="Precision-Recall Curve" />
-</p>
+![Pixel Confusion Matrix](assets/pixel_confusion_matrix.png)
+
+![Precision-Recall Curve](assets/pr_curve.png)
 
 ---
 
