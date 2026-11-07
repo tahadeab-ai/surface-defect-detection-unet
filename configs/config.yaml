@@ -1,0 +1,90 @@
+# Centralized Hyperparameters & Configurations for Industrial Surface Defect Segmentation
+
+dataset:
+  name: "neu_surface_defect_seg"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  image_size: [256, 256]
+  in_channels: 3
+  num_classes: 1
+  split_ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  random_seed: 42
+
+augmentation:
+  clahe:
+    clip_limit: 2.0
+    tile_grid_size: [8, 8]
+    p: 1.0
+  spatial:
+    horizontal_flip_p: 0.5
+    vertical_flip_p: 0.5
+    random_rotate90_p: 0.5
+    shift_scale_rotate:
+      shift_limit: 0.0625
+      scale_limit: 0.10
+      rotate_limit: 15
+      p: 0.5
+    elastic_transform:
+      alpha: 1
+      sigma: 50
+      p: 0.3
+    grid_distortion:
+      num_steps: 5
+      distort_limit: 0.3
+      p: 0.3
+  normalization:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+
+model:
+  architecture: "unet"
+  encoder_name: "resnet34"          # Alternative: "efficientnet-b2"
+  encoder_weights: "imagenet"       # Set to null for baseline training from scratch
+  in_channels: 3
+  classes: 1
+  activation: null                  # Returns raw logits for AMP and numerical stability
+
+loss:
+  type: "combo"                     # Options: "combo", "focal_tversky", "bce", "dice"
+  bce_weight: 0.5                   # alpha in alpha * BCE + beta * Dice
+  dice_weight: 0.5                  # beta in alpha * BCE + beta * Dice
+  smooth: 1.0
+  focal_tversky:
+    alpha: 0.7                      # Weight for False Negatives (heavily penalizes missing micro-defects)
+    beta: 0.3                       # Weight for False Positives
+    gamma: 1.33                     # Focal parameter
+
+training:
+  batch_size: 16
+  num_workers: 4
+  epochs: 30
+  optimizer:
+    name: "AdamW"
+    lr: 0.0001
+    weight_decay: 0.00001
+  scheduler:
+    name: "CosineAnnealingLR"        # Options: "CosineAnnealingLR", "ReduceLROnPlateau"
+    t_max: 30
+    min_lr: 0.000001
+    factor: 0.5
+    patience: 3
+  amp: true                         # Automatic Mixed Precision (torch.amp.autocast)
+  device: "cuda"                    # Falls back to "cpu" if CUDA unavailable
+  checkpoint_dir: "checkpoints"
+  checkpoint_name: "best_unet_resnet34.pth"
+  save_best_only: true
+  metric_to_track: "val_dice"
+
+inference:
+  checkpoint_path: "checkpoints/best_unet_resnet34.pth"
+  confidence_threshold: 0.50
+  min_contour_area: 15              # In pixels, filters out isolated noise artifacts
+  max_defect_area_pct_pass: 0.50    # Surface passes QA if defect area is below 0.5%
+  overlay:
+    alpha: 0.45
+    color: [255, 40, 40]            # RGB Red highlight for detected defects
+    contour_thickness: 2
+  assets_dir: "assets"

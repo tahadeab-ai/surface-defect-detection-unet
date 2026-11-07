@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyTorch checkpoints and weight files (stored in GitHub Releases)
+checkpoints/
+*.pth
+*.pt
+*.onnx
+
+# Datasets and local caches
+data/raw/
+data/processed/
+kaggle.json
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Explicitly track benchmark assets and demonstration figures
+!assets/*.png
+!assets/**/*.png
