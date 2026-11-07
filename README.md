@@ -154,7 +154,68 @@ surface-defect-detection-unet/
 
 ---
 
-## 🚀 Quickstart Guide
+## ⚡ Run & Test in Google Colab (One-Click / Step-by-Step)
+
+You can run model inference, test segmentation on sample images, launch the interactive Gradio demo, or execute end-to-end training directly on a free Google Colab **NVIDIA T4 GPU** runtime.
+
+### Option A: One-Click Interactive Notebook (Recommended)
+Click the badge below to open the complete, pre-configured Jupyter notebook:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tahadeab-ai/surface-defect-detection-unet/blob/main/notebooks/defect_segmentation_colab.ipynb)
+
+---
+
+### Option B: Run in Any Blank Colab Notebook (Copy-Paste Cells)
+Open a blank [Google Colab notebook](https://colab.research.google.com), set runtime to **T4 GPU** (*Runtime → Change runtime type → T4 GPU*), and execute:
+
+#### Step 1: Clone Repository & Install Dependencies
+```python
+# Verify GPU availability
+!nvidia-smi
+
+# Clone repository and enter directory
+!git clone https://github.com/tahadeab-ai/surface-defect-detection-unet.git
+%cd surface-defect-detection-unet
+
+# Install required packages
+!pip install -q -r requirements.txt
+```
+
+#### Step 2: Download Real Trained Weights from GitHub Release v1.1.0
+```python
+import os
+os.makedirs("checkpoints", exist_ok=True)
+
+# Download genuine trained PyTorch checkpoint (~279 MB)
+!wget -O checkpoints/best_unet_resnet34.pth https://github.com/tahadeab-ai/surface-defect-detection-unet/releases/download/v1.1.0/best_unet_resnet34.pth
+!ls -lh checkpoints/
+```
+
+#### Step 3: Run Inference & Generate Test Artifacts
+```python
+# Execute post-processing, OpenCV contour detection, and visual artifact generation
+!python -m src.inference
+!ls -lh assets/
+```
+
+#### Step 4: Launch Interactive Gradio Inspection Dashboard (Public URL)
+```python
+from app.app import demo
+# Generates a shareable public URL (https://xxxx.gradio.live) to test live from your browser
+demo.launch(share=True, debug=False)
+```
+
+#### Step 5: (Optional) Re-Train Model with Automatic Mixed Precision (AMP)
+```python
+# Download benchmark dataset and execute full 30-epoch training loop
+!python -m src.train --config configs/config.yaml
+```
+
+*For complete cell-by-cell verification, Kaggle dataset integration, and baseline ablation scripts, see [docs/COLAB_RUNBOOK.md](docs/COLAB_RUNBOOK.md).*
+
+---
+
+## 🚀 Quickstart Guide (Local Environment)
 
 ### 1. Clone & Set Up Environment
 ```bash
